@@ -15,7 +15,9 @@ const appRouter = router({
         .mutation(async (opts) => {
             const title = opts.input.title;
             const description = opts.input.description;
+            const username = opts.ctx.username;
 
+            console.log(username)
 
             return ({
                 id: "1",
@@ -30,6 +32,17 @@ export type AppRouter = typeof appRouter
 
 const server = createHTTPServer({
     router: appRouter,
+    createContext(opts) {
+        let authHeader = opts.req.headers["authorization"];
+
+        // Do jwt verification
+
+        console.log(authHeader);
+
+        return {
+            username: "Nithish"
+        }
+    }
   });
    
 server.listen(3000);
