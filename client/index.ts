@@ -1,31 +1,28 @@
 import { createTRPCClient, httpBatchLink } from '@trpc/client';
 import type { AppRouter } from '../server';
-//     👆 **type-only** import
- 
-// Pass AppRouter as generic here. 👇 This lets the `trpc` object know
-// what procedures are available on the server and their input/output types.
+
 const trpc = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
       url: 'http://localhost:3000',
       async headers() {
         return {
-          Authorization: "Bearer 123123"
+            Authorization: "Bearer 1"
         }
-      }
+      },
     }),
   ],
 });
 
-
-const main = async () => {
-  let response = await trpc.createTodo.mutate({
-    title: "learn ai",
-    description: "learning ai"
-  })
-
-  console.log(response)
+async function main() {
+    const user = await trpc.user.signup.mutate({
+        username: "nithish@gmail.com",
+        password: "!23456"
+    });
+    console.log(user.token);
+    
+    const todo = await trpc.todo.todoCreate.mutate({description: "adsa", title: "asd"});
+    console.log(todo);
 }
 
 main();
-
