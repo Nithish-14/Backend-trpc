@@ -1,8 +1,9 @@
 import { createNextApiHandler } from '@trpc/server/adapters/next';
-import { appRouter } from '../../../server';
+
 import jwt from "jsonwebtoken";
 export const SECRET = 'SECr3t';
 import { User , Todo} from "../../../server/db";
+import { appRouter } from '../../../server';
 
 function createContext(opts: any) {
     let authHeader = opts.req.headers["authorization"];

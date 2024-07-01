@@ -16,7 +16,7 @@ let mongo_url = process.env.MONGO_URL || "";
 mongoose.connect(mongo_url, {dbName: 'todo'});
 
 // using trpc
-const appRouter = router({
+export const appRouter = router({
     user: userRouter,
     todo: todoRouter,
 });
