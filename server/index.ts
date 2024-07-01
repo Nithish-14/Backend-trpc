@@ -7,10 +7,13 @@ import { userRouter } from './routers/user';
 import { todoRouter } from './routers/todo';
 import cors from "cors";
 export const SECRET = 'SECr3t';
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 let mongo_url = process.env.MONGO_URL || "";
 
-mongoose.connect(mongo_url, { dbName: "todo" });
+mongoose.connect(mongo_url);
 
 // using trpc
 const appRouter = router({
