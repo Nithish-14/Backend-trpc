@@ -13,7 +13,7 @@ dotenv.config();
 
 let mongo_url = process.env.MONGO_URL || "";
 
-mongoose.connect(mongo_url);
+mongoose.connect(mongo_url, {dbName: 'todo'});
 
 // using trpc
 const appRouter = router({

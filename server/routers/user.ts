@@ -14,10 +14,12 @@ export const userRouter = router({
         .mutation(async (opts) => {
             let username = opts.input.username;
             let password = opts.input.password;
-            let response = await opts.ctx.db.User.insertMany([{
+            let res = await opts.ctx.db.User.insertMany([{
                 username,
                 password
             }])
+            //@ts-ignore
+            const response = await res.save();
             let userId = response[0]._id;
             const token: string = jwt.sign({ userId: userId }, SECRET, { expiresIn: '1h' });
 
