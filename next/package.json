@@ -9,14 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.49.2",
+    "@trpc/client": "^11.0.0-rc.433",
+    "@trpc/next": "^11.0.0-rc.433",
+    "@trpc/react-query": "^11.0.0-rc.433",
+    "@trpc/server": "^11.0.0-rc.433",
+    "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.4"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
-    "@types/react-dom": "^18"
+    "@types/react-dom": "^18",
+    "typescript": "^5"
   }
 }
