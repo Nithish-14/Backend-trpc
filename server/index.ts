@@ -1,48 +1,53 @@
-import { publicProcedure, router } from './trpc'
-import {z} from 'zod'
+import { router } from './trpc';
 import { createHTTPServer } from '@trpc/server/adapters/standalone';
+import mongoose, { mongo } from 'mongoose';
+import { User , Todo} from "./db";
+import jwt from 'jsonwebtoken';
+import { userRouter } from './routers/user';
+import { todoRouter } from './routers/todo';
+import cors from "cors";
+export const SECRET = 'SECr3t';
 
+let mongo_url = process.env.MONGO_URL || "";
 
+mongoose.connect(mongo_url, { dbName: "todo" });
 
-const todoInputType = z.object({
-    title: z.string(),
-    description: z.string()
-})
-
+// using trpc
 const appRouter = router({
-    createTodo: publicProcedure
-        .input(todoInputType)
-        .mutation(async (opts) => {
-            const title = opts.input.title;
-            const description = opts.input.description;
-            const username = opts.ctx.username;
+    user: userRouter,
+    todo: todoRouter,
+});
 
-            console.log(username)
-
-            return ({
-                id: "1",
-                title
-            })
-        })
-})
-
-
-export type AppRouter = typeof appRouter
-
+ 
+// Export type router type signature,
+// NOT the router itself.
+export type AppRouter = typeof appRouter;
 
 const server = createHTTPServer({
     router: appRouter,
+    middleware: cors(),
     createContext(opts) {
         let authHeader = opts.req.headers["authorization"];
 
-        // Do jwt verification
-
-        console.log(authHeader);
+        if (authHeader) {
+            const token = authHeader.split(' ')[1];
+            console.log(token);
+            return new Promise<{db: {Todo: typeof Todo, User: typeof User}, userId?: string}>((resolve) => {
+                jwt.verify(token, SECRET, (err, user) => {
+                    if (user) {
+                        //@ts-ignore
+                        resolve({userId: user.userId as string, db: {Todo, User}});
+                    } else {
+                        resolve({db: {Todo, User}});
+                    }
+                });
+            })
+        }
 
         return {
-            username: "Nithish"
+            db: {Todo, User},
         }
     }
-  });
+});
    
 server.listen(3000);
